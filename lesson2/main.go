@@ -5,7 +5,10 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"sync"
 )
+
+var mu sync.Mutex
 
 func replace(w http.ResponseWriter, r *http.Request) {
 	var buffer [1000]byte
@@ -19,6 +22,8 @@ func replace(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+	mu.Lock()
+	defer mu.Unlock()
 	f, _ := os.Create("cache")
 	defer f.Close()
 	f.Write(buffer[:n])
