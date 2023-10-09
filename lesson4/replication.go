@@ -15,9 +15,11 @@ func websocketSession(peer string) {
 	c, _, err := websocket.Dial(ctx, fmt.Sprintf("ws://%s/ws", peer), nil)
 
 	if err != nil {
-		log.Printf("Dial. Failed to connect to %s\n", peer)
+		log.Printf("Session. Failed to connect to %s\n", peer)
 		return
 	}
+
+	log.Printf("Session. Connected to %s\n", peer)
 
 	defer c.Close(websocket.StatusGoingAway, "")
 
@@ -27,9 +29,11 @@ func websocketSession(peer string) {
 		err = wsjson.Read(ctx, c, &transaction)
 
 		if err != nil {
-			log.Printf("Dial. Failed to receive transaction from %s\n", peer)
+			log.Printf("Session. Failed to receive transaction from %s\n", peer)
 			return
 		}
+
+		log.Printf("Session. Received transaction from %s\n", peer)
 
 		transactions <- transaction
 	}

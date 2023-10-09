@@ -76,9 +76,11 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		log.Println("Handler. Failed to accept wx")
+		log.Println("Handler. Failed to accept ws")
 		return
 	}
+
+	log.Println("Handler. Connected to ws")
 
 	defer c.Close(websocket.StatusGoingAway, "")
 
